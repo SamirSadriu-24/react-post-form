@@ -102,7 +102,11 @@ input {
 
 
 .content {
-  height: 100px;
+  font-size: 20px;
+  border-radius: 2px;
+  padding: 10px;
+  cursor: pointer;
+  width: 800px;
   display:flex;
   align-items: center;
 }

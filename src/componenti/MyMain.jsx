@@ -1,4 +1,30 @@
+import { useState } from "react"
+
 const MyMain = () => {
+
+    const [dati, setDati] = useState({
+        title:"",
+        author:"",
+        body:"",
+        public:false
+    });
+
+    const gestisciCambiamenti = (e) =>{
+        const {name, value, type, checked} = e.target;
+        let nuovoValore;
+
+        if(type === "checkbox") {
+            nuovoValore = checked;
+        } else{
+            nuovoValore = value;
+        }
+
+        setDati((nuoviDati) => ({
+            ...nuoviDati,
+            [name] : nuovoValore,
+        }));
+    }
+
     return (
         <div className="main">
             <form className="blog-form">
@@ -9,8 +35,10 @@ const MyMain = () => {
                         <input
                             className="titoloBlog"
                             name="title"
-                            value=""
+                            value={dati.title}
+                            onChange={gestisciCambiamenti}
                             type="text" />
+                            
                     </div>
 
 
@@ -19,16 +47,18 @@ const MyMain = () => {
                         <input
                             className="utentePost"
                             name="author"
-                            value=""
+                            value={dati.author}
+                            onChange={gestisciCambiamenti}
                             type="text" />
                     </div>
 
                     <div className="contenuto">
                         <p>Contenuto</p>
-                        <input
+                        <textarea
                             className="content"
                             name="body"
-                            value=""
+                            value={dati.body}
+                            onChange={gestisciCambiamenti}
                             type="text" />
                     </div>
 
@@ -37,7 +67,8 @@ const MyMain = () => {
                         <input
                             className="pubblico"
                             name="public"
-                            value="false"
+                            value={dati.public}
+                            onChange={gestisciCambiamenti}
                             type="checkbox" />
                     </div>
                 </div>
