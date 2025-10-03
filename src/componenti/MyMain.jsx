@@ -1,33 +1,60 @@
 import { useState } from "react"
 
 const MyMain = () => {
-
+    const URL = "https://67c5b4f3351c081993fb1ab6.mockapi.io/api/posts"
     const [dati, setDati] = useState({
-        title:"",
-        author:"",
-        body:"",
-        public:false
+        title: "",
+        author: "",
+        body: "",
+        public: false
     });
 
-    const gestisciCambiamenti = (e) =>{
-        const {name, value, type, checked} = e.target;
-        let nuovoValore;
+    const GestisciInvioDati = (e) => {
+        e.preventDefault();
 
-        if(type === "checkbox") {
-            nuovoValore = checked;
-        } else{
-            nuovoValore = value;
-        }
+        const datiDaInviare = {
+            title: dati.title,
+            author: dati.author,
+            body: dati.body,
+            public: dati.public
+        };
+
+        console.log("Dati Inviati:", datiDaInviare);
+
+        fetch(URL, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datiDaInviare),
+        })
+
+
+            .then((risposta) => risposta.json())
+            .then((risultato) => {
+                alert("Post Bloggato" + JSON.stringify(risultato));
+
+                setDati({
+                    title: "",
+                    author: "",
+                    body: "",
+                    public: false,
+                });
+            })
+    }
+
+    const gestisciCambiamenti = (e) => {
+        const { name, value, type, checked } = e.target;
+
+        const nuovoValore = type === "checkbox" ? checked : value
 
         setDati((nuoviDati) => ({
             ...nuoviDati,
-            [name] : nuovoValore,
+            [name]: nuovoValore,
         }));
     }
 
     return (
         <div className="main">
-            <form className="blog-form">
+            <form className="blog-form" onSubmit={GestisciInvioDati}>
                 <div className="input-container">
 
                     <div className="blogTitolo">
@@ -38,7 +65,7 @@ const MyMain = () => {
                             value={dati.title}
                             onChange={gestisciCambiamenti}
                             type="text" />
-                            
+
                     </div>
 
 
@@ -59,7 +86,7 @@ const MyMain = () => {
                             name="body"
                             value={dati.body}
                             onChange={gestisciCambiamenti}
-                            type="text" />
+                        />
                     </div>
 
                     <div className="checkbox">
@@ -67,13 +94,17 @@ const MyMain = () => {
                         <input
                             className="pubblico"
                             name="public"
-                            value={dati.public}
+                            checked={dati.public}
                             onChange={gestisciCambiamenti}
                             type="checkbox" />
                     </div>
                 </div>
 
-                <button className="send">Posta</button>
+                <button
+                    className="send"
+                    type="submit" >
+                    Posta
+                </button>
             </form>
         </div>
     )
